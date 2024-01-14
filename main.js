@@ -7,7 +7,7 @@ const sizes = {
   height: 500,
 };
 
-const speedDown = 300;
+const speedDown = 200;
 
 //Build the scene
 class GameScene extends Phaser.Scene {
@@ -20,6 +20,10 @@ class GameScene extends Phaser.Scene {
     this.playerSpeed = speedDown + 50;
     this.target; // the apple
     this.points = 0;
+    this.textScore;
+    this.textTime;
+    this.timedEvent;
+    this.remainingTime;
   }
 
   //2. load any assets
@@ -39,10 +43,10 @@ class GameScene extends Phaser.Scene {
     this.player.body.allowGravity = false;
     this.player.setCollideWorldBounds(true);
 
-    // Makes the basket hitbox smaller and realistic
+    // Makes the basket hit box smaller and realistic
     this.player.setSize(80, 15).setOffset(10, 70);
 
-        //A more "reactive" way to do it
+        //Another, more "reactive" way to do it
     // this.player.setSize(this.player.width-this.player.width/4, this.player.height/6).
     // setOffset(this.player.width/10, this.player.height - this.player.height/10);
 
@@ -58,10 +62,32 @@ class GameScene extends Phaser.Scene {
     );
 
     this.cursor = this.input.keyboard.createCursorKeys();
+
+    //create place to keep score
+    this.textScore = this.add.text(sizes.width - 120, 10, "Score:0", {
+      font: "25px Arial",
+      fill: "#000000",
+    });
+
+    //place to show timer
+    this.textTime= this.add.text(10, 10, "Time: 00", {
+      font: "25px Arial",
+      fill: "#000000",
+    });
+
+    this.timedEvent = this.time.delayedCall(3000,this.gameOver,[], this);
+
   }
 
   //5. What happens
   update() {
+
+    //gets time left
+    this.remainingTime=this.timedEvent.getRemainingSeconds()
+    this.textTime.setText(`Time - ${Math.round(this.remainingTime).toString()}`)
+
+
+    //moves apple down and changes spawn point
     if (this.target.y >= sizes.height) {
       this.target.setY(0);
       this.target.setX(this.getRandomX());
@@ -90,6 +116,11 @@ class GameScene extends Phaser.Scene {
     this.target.setY(0);
     this.target.setX(this.getRandomX());
     this.points++;
+    this.textScore.setText(`Score: ${this.points}`)
+  }
+
+  gameOver() {
+    console.log("Game over!")
   }
 }
 
