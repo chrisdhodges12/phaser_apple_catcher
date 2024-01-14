@@ -7,7 +7,15 @@ const sizes = {
   height: 500,
 };
 
-const speedDown = 200;
+const speedDown = 300;
+
+
+//html query selectors
+const gameStartDiv = document.querySelector("#gameStartDiv");
+const gameStartBtn = document.querySelector("#gameStartBtn");
+const gameEndDiv = document.querySelector("#gameEndDiv");
+const gameWinLoseSpan = document.querySelector("#gameWinLoseSpan");
+const gameEndScoreSpan = document.querySelector("#gameEndScoreSpan");
 
 //Build the scene
 class GameScene extends Phaser.Scene {
@@ -47,10 +55,12 @@ class GameScene extends Phaser.Scene {
   //3. develop logic
   create() {
 
+    this.scene.pause("scene-game")
+
     //create sounds
     this.coinMusic = this.sound.add("coin");
     this.bgMusic =this.sound.add("bgMusic");
-    // this.bgMusic.play();
+    this.bgMusic.play();
 
     //add background and basket w/ physics
     this.add.image(0, 0, "bg").setOrigin(0, 0);
@@ -94,7 +104,7 @@ class GameScene extends Phaser.Scene {
     });
 
     //Set timer countdown in miliseconds
-    this.timedEvent = this.time.delayedCall(3000, this.gameOver, [], this);
+    this.timedEvent = this.time.delayedCall(30000, this.gameOver, [], this);
 
     this.emitter=this.add.particles(0,0,"money",{
       speed:100,
@@ -157,12 +167,23 @@ class GameScene extends Phaser.Scene {
     this.coinMusic.play();
 
     // turn this ON to stop annoying noises!! 
-    this.coinMusic.stop();
+    // this.coinMusic.stop();
   }
 
   gameOver() {
-    console.log("Game over!");
+    this.sys.game.destroy(true);
+    if(this.points >= 10) {
+      gameEndScoreSpan.textContent = this.points
+      gameWinLoseSpan.textContent = "Win"
+    }
+    else {
+      gameEndScoreSpan.textContent = this.points
+      gameWinLoseSpan.textContent = "Lose"
+    }
+
+    gameEndDiv.style.display="flex"
   }
+
 }
 
 const config = {
@@ -181,3 +202,10 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
+
+
+//START button
+gameStartBtn.addEventListener("click", ()=>{
+  gameStartDiv.style.display="none"
+  game.scene.resume("scene-game")
+})
