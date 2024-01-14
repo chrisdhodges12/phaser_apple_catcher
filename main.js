@@ -9,7 +9,6 @@ const sizes = {
 
 const speedDown = 300;
 
-
 //html query selectors
 const gameStartDiv = document.querySelector("#gameStartDiv");
 const gameStartBtn = document.querySelector("#gameStartBtn");
@@ -36,7 +35,6 @@ class GameScene extends Phaser.Scene {
     this.emitter;
   }
 
-
   //-------------------------------//
   //2. load any assets
   preload() {
@@ -45,21 +43,18 @@ class GameScene extends Phaser.Scene {
     this.load.image("apple", "/assets/apple.png");
     this.load.audio("bgMusic", "/assets/bgMusic.mp3");
     this.load.audio("coin", "/assets/coin.mp3");
-    this.load.image("money", "/assets/money.png")
-
+    this.load.image("money", "/assets/money.png");
   }
-
 
   //------------------------------//
 
   //3. develop logic
   create() {
-
-    this.scene.pause("scene-game")
+    this.scene.pause("scene-game");
 
     //create sounds
     this.coinMusic = this.sound.add("coin");
-    this.bgMusic =this.sound.add("bgMusic");
+    this.bgMusic = this.sound.add("bgMusic");
     this.bgMusic.play();
 
     //add background and basket w/ physics
@@ -106,22 +101,23 @@ class GameScene extends Phaser.Scene {
     //Set timer countdown in miliseconds
     this.timedEvent = this.time.delayedCall(30000, this.gameOver, [], this);
 
-    this.emitter=this.add.particles(0,0,"money",{
-      speed:100,
-      gravityY:speedDown-200,
-      scale:0.04,
-      duration:100,
-      emitting:false
-    })
+    this.emitter = this.add.particles(0, 0, "money", {
+      speed: 100,
+      gravityY: speedDown - 200,
+      scale: 0.04,
+      duration: 100,
+      emitting: false,
+    });
 
     // money emitter follows the basket
-    this.emitter.startFollow(this.player, this.player.width / 2, this.player.height / 10);
-
-
-
+    this.emitter.startFollow(
+      this.player,
+      this.player.width / 2,
+      this.player.height / 10
+    );
   }
 
-//------------------------------------------- //
+  //------------------------------------------- //
 
   //5. What happens
   update() {
@@ -166,24 +162,22 @@ class GameScene extends Phaser.Scene {
     //plays coin sound when apple hits
     this.coinMusic.play();
 
-    // turn this ON to stop annoying noises!! 
+    // turn this ON to stop annoying noises!!
     // this.coinMusic.stop();
   }
 
   gameOver() {
     this.sys.game.destroy(true);
-    if(this.points >= 10) {
-      gameEndScoreSpan.textContent = this.points
-      gameWinLoseSpan.textContent = "Win"
-    }
-    else {
-      gameEndScoreSpan.textContent = this.points
-      gameWinLoseSpan.textContent = "Lose"
+    if (this.points >= 10) {
+      gameEndScoreSpan.textContent = this.points;
+      gameWinLoseSpan.textContent = "Win";
+    } else {
+      gameEndScoreSpan.textContent = this.points;
+      gameWinLoseSpan.textContent = "Lose";
     }
 
-    gameEndDiv.style.display="flex"
+    gameEndDiv.style.display = "flex";
   }
-
 }
 
 const config = {
@@ -203,9 +197,8 @@ const config = {
 
 const game = new Phaser.Game(config);
 
-
 //START button
-gameStartBtn.addEventListener("click", ()=>{
-  gameStartDiv.style.display="none"
-  game.scene.resume("scene-game")
-})
+gameStartBtn.addEventListener("click", () => {
+  gameStartDiv.style.display = "none";
+  game.scene.resume("scene-game");
+});
