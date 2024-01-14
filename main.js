@@ -11,7 +11,6 @@ const speedDown = 200;
 
 //Build the scene
 class GameScene extends Phaser.Scene {
-
   //1. construct components of the game
   constructor() {
     super("scene-game");
@@ -24,6 +23,8 @@ class GameScene extends Phaser.Scene {
     this.textTime;
     this.timedEvent;
     this.remainingTime;
+    this.coinMusic;
+    this.bgMusic;
   }
 
   //2. load any assets
@@ -31,10 +32,21 @@ class GameScene extends Phaser.Scene {
     this.load.image("bg", "/assets/bg.png");
     this.load.image("basket", "/assets/basket.png");
     this.load.image("apple", "/assets/apple.png");
+    this.load.audio("bgMusic", "/assets/bgMusic.mp3");
+    this.load.audio("coin", "/assets/coin.mp3");
+
   }
+
 
   //3. develop logic
   create() {
+
+    //create sounds
+    this.coinMusic = this.sound.add("coin");
+    this.bgMusic =this.sound.add("bgMusic");
+    // this.bgMusic.play();
+
+    //add backround and basket w/ physics
     this.add.image(0, 0, "bg").setOrigin(0, 0);
     this.player = this.physics.add
       .image(0, sizes.height - 100, "basket")
@@ -46,7 +58,7 @@ class GameScene extends Phaser.Scene {
     // Makes the basket hit box smaller and realistic
     this.player.setSize(80, 15).setOffset(10, 70);
 
-        //Another, more "reactive" way to do it
+    //Another, more "reactive" way to do it
     // this.player.setSize(this.player.width-this.player.width/4, this.player.height/6).
     // setOffset(this.player.width/10, this.player.height - this.player.height/10);
 
@@ -70,22 +82,21 @@ class GameScene extends Phaser.Scene {
     });
 
     //place to show timer
-    this.textTime= this.add.text(10, 10, "Time: 00", {
+    this.textTime = this.add.text(10, 10, "Time: 00", {
       font: "25px Arial",
       fill: "#000000",
     });
 
-    this.timedEvent = this.time.delayedCall(3000,this.gameOver,[], this);
-
+    this.timedEvent = this.time.delayedCall(3000, this.gameOver, [], this);
   }
 
   //5. What happens
   update() {
-
     //gets time left
-    this.remainingTime=this.timedEvent.getRemainingSeconds()
-    this.textTime.setText(`Time - ${Math.round(this.remainingTime).toString()}`)
-
+    this.remainingTime = this.timedEvent.getRemainingSeconds();
+    this.textTime.setText(
+      `Time - ${Math.round(this.remainingTime).toString()}`
+    );
 
     //moves apple down and changes spawn point
     if (this.target.y >= sizes.height) {
@@ -104,7 +115,6 @@ class GameScene extends Phaser.Scene {
     }
   }
 
-
   //   callback functions  // ||||||
   // get random x coordinate for each new apple
   getRandomX() {
@@ -116,15 +126,16 @@ class GameScene extends Phaser.Scene {
     this.target.setY(0);
     this.target.setX(this.getRandomX());
     this.points++;
-    this.textScore.setText(`Score: ${this.points}`)
+    this.textScore.setText(`Score: ${this.points}`);
+
+    //plays coin sound when apple hits
+    this.coinMusic.play()
   }
 
   gameOver() {
-    console.log("Game over!")
+    console.log("Game over!");
   }
 }
-
-
 
 const config = {
   type: Phaser.WEBGL,
@@ -140,6 +151,5 @@ const config = {
   },
   scene: [GameScene],
 };
-
 
 const game = new Phaser.Game(config);
