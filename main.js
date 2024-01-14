@@ -25,8 +25,11 @@ class GameScene extends Phaser.Scene {
     this.remainingTime;
     this.coinMusic;
     this.bgMusic;
+    this.emitter;
   }
 
+
+  //-------------------------------//
   //2. load any assets
   preload() {
     this.load.image("bg", "/assets/bg.png");
@@ -34,9 +37,12 @@ class GameScene extends Phaser.Scene {
     this.load.image("apple", "/assets/apple.png");
     this.load.audio("bgMusic", "/assets/bgMusic.mp3");
     this.load.audio("coin", "/assets/coin.mp3");
+    this.load.image("money", "/assets/money.png")
 
   }
 
+
+  //------------------------------//
 
   //3. develop logic
   create() {
@@ -46,7 +52,7 @@ class GameScene extends Phaser.Scene {
     this.bgMusic =this.sound.add("bgMusic");
     // this.bgMusic.play();
 
-    //add backround and basket w/ physics
+    //add background and basket w/ physics
     this.add.image(0, 0, "bg").setOrigin(0, 0);
     this.player = this.physics.add
       .image(0, sizes.height - 100, "basket")
@@ -87,8 +93,25 @@ class GameScene extends Phaser.Scene {
       fill: "#000000",
     });
 
+    //Set timer countdown in miliseconds
     this.timedEvent = this.time.delayedCall(3000, this.gameOver, [], this);
+
+    this.emitter=this.add.particles(0,0,"money",{
+      speed:100,
+      gravityY:speedDown-200,
+      scale:0.04,
+      duration:100,
+      emitting:false
+    })
+
+    // money emitter follows the basket
+    this.emitter.startFollow(this.player, this.player.width / 2, this.player.height / 10);
+
+
+
   }
+
+//------------------------------------------- //
 
   //5. What happens
   update() {
@@ -121,15 +144,20 @@ class GameScene extends Phaser.Scene {
     return Math.floor(Math.random() * 480);
   }
 
-  // points will increment when the apple reaches y=0 AND contains the randomly generated X coordinate
+  // logic for when apple hits basket
   targetHit() {
     this.target.setY(0);
     this.target.setX(this.getRandomX());
     this.points++;
     this.textScore.setText(`Score: ${this.points}`);
 
+    this.emitter.start();
+
     //plays coin sound when apple hits
-    this.coinMusic.play()
+    this.coinMusic.play();
+
+    // turn this ON to stop annoying noises!! 
+    this.coinMusic.stop();
   }
 
   gameOver() {
