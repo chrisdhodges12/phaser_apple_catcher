@@ -68,6 +68,7 @@ class GameScene extends Phaser.Scene {
 
     // Makes the basket hit box smaller and realistic
     this.player.setSize(80, 15).setOffset(10, 70);
+    // this.setDebug(false);
 
     //Another, more "reactive" way to do it
     // this.player.setSize(this.player.width-this.player.width/4, this.player.height/6).
@@ -189,7 +190,7 @@ const config = {
     default: "arcade",
     arcade: {
       gravity: { y: speedDown },
-      debug: true,
+      debug: false,
     },
   },
   scene: [GameScene],
