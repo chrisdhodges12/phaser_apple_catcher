@@ -23,6 +23,7 @@ class GameScene extends Phaser.Scene {
     super("scene-game");
     this.player; //the basket
     this.cursor;
+    // this.pointer;
     this.playerSpeed = speedDown + 50;
     this.target; // the apple
     this.points = 0;
@@ -68,7 +69,7 @@ class GameScene extends Phaser.Scene {
 
     // Makes the basket hit box smaller and realistic
     this.player.setSize(80, 15).setOffset(10, 70);
-    // this.setDebug(false);
+
 
     //Another, more "reactive" way to do it
     // this.player.setSize(this.player.width-this.player.width/4, this.player.height/6).
@@ -85,7 +86,12 @@ class GameScene extends Phaser.Scene {
       this
     );
 
+    //handle inputs
     this.cursor = this.input.keyboard.createCursorKeys();
+    // this.pointer = this.input.on(this.handlePointerDown);
+    // this.pointer = this.input.on(this.handlePointerUp);
+
+
 
     //create place to keep score
     this.textScore = this.add.text(sizes.width - 120, 10, "Score:0", {
@@ -134,6 +140,8 @@ class GameScene extends Phaser.Scene {
       this.target.setX(this.getRandomX());
     }
 
+
+    //input controls for keyboard
     const { left, right } = this.cursor;
 
     if (left.isDown) {
@@ -143,9 +151,32 @@ class GameScene extends Phaser.Scene {
     } else {
       this.player.setVelocityX(0);
     }
+
+    // const { touchLeft, touchRight } = this.pointer;
+
+    // if (touchLeft.isDown)
+
+
+  };
+
+  handlePointerDown(pointer) {
+    const screenWidth = this.sys.game.config.width;
+  
+    if (pointer.x < screenWidth / 2) {
+      // Left side of the screen touched
+      actor.setVelocityX(-100); // Adjust velocity based on your game logic
+    } else {
+      // Right side of the screen touched
+      actor.setVelocityX(100); // Adjust velocity based on your game logic
+    }
+  }
+  
+  handlePointerUp() {
+    // Stop the actor when touch is released
+    actor.setVelocityX(0);
   }
 
-  //   callback functions  // ||||||
+  //   callback functions  // 
   // get random x coordinate for each new apple
   getRandomX() {
     return Math.floor(Math.random() * 480);
