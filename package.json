@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "nodemon server.js"
+    // "start": "nodemon server.js"
+    "start": "server.js"
   },
   "devDependencies": {
     "vite": "^5.0.8"
