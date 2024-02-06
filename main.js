@@ -12,6 +12,9 @@ const speedDown = 300;
 //html query selectors
 const gameStartDiv = document.querySelector("#gameStartDiv");
 const gameStartBtn = document.querySelector("#gameStartBtn");
+// const leftArrowBtn = document.querySelector("#leftArrowBtn");
+// const rightArrowBtn = document.querySelector("#rightArrowBtn");
+
 const gameEndDiv = document.querySelector("#gameEndDiv");
 const gameWinLoseSpan = document.querySelector("#gameWinLoseSpan");
 const gameEndScoreSpan = document.querySelector("#gameEndScoreSpan");
@@ -22,8 +25,7 @@ class GameScene extends Phaser.Scene {
   constructor() {
     super("scene-game");
     this.player; //the basket
-    this.cursor;
-    // this.pointer;
+    this.pointer;
     this.playerSpeed = speedDown + 50;
     this.target; // the apple
     this.points = 0;
@@ -56,7 +58,7 @@ class GameScene extends Phaser.Scene {
     //create sounds
     this.coinMusic = this.sound.add("coin");
     this.bgMusic = this.sound.add("bgMusic");
-    this.bgMusic.play();
+    // this.bgMusic.play();
 
     //add background and basket w/ physics
     this.add.image(0, 0, "bg").setOrigin(0, 0);
@@ -69,7 +71,6 @@ class GameScene extends Phaser.Scene {
 
     // Makes the basket hit box smaller and realistic
     this.player.setSize(80, 15).setOffset(10, 70);
-
 
     //Another, more "reactive" way to do it
     // this.player.setSize(this.player.width-this.player.width/4, this.player.height/6).
@@ -88,10 +89,10 @@ class GameScene extends Phaser.Scene {
 
     //handle inputs
     this.cursor = this.input.keyboard.createCursorKeys();
-    // this.pointer = this.input.on(this.handlePointerDown);
-    // this.pointer = this.input.on(this.handlePointerUp);
-
-
+    this.input.on("pointerdown", function (pointer) {
+      // Log x and y coordinates of the click
+      console.log("Clicked at x: " + pointer.x + " y: " + pointer.y);
+    });
 
     //create place to keep score
     this.textScore = this.add.text(sizes.width - 120, 10, "Score:0", {
@@ -122,7 +123,7 @@ class GameScene extends Phaser.Scene {
       this.player.width / 2,
       this.player.height / 10
     );
-  }
+  };
 
   //------------------------------------------- //
 
@@ -140,43 +141,23 @@ class GameScene extends Phaser.Scene {
       this.target.setX(this.getRandomX());
     }
 
+    //input controls
+    
+    const screenWidth = 500;
 
-    //input controls for keyboard
-    const { left, right } = this.cursor;
 
-    if (left.isDown) {
+    if (this.input.activePointer.isDown && this.input.activePointer.x < screenWidth / 2) {
       this.player.setVelocityX(-this.playerSpeed);
-    } else if (right.isDown) {
+    } else if (this.input.activePointer.isDown && this.input.activePointer.x > screenWidth / 2) {
       this.player.setVelocityX(this.playerSpeed);
     } else {
       this.player.setVelocityX(0);
     }
-
-    // const { touchLeft, touchRight } = this.pointer;
-
-    // if (touchLeft.isDown)
-
-
-  };
-
-  handlePointerDown(pointer) {
-    const screenWidth = this.sys.game.config.width;
-  
-    if (pointer.x < screenWidth / 2) {
-      // Left side of the screen touched
-      actor.setVelocityX(-100); // Adjust velocity based on your game logic
-    } else {
-      // Right side of the screen touched
-      actor.setVelocityX(100); // Adjust velocity based on your game logic
-    }
-  }
-  
-  handlePointerUp() {
-    // Stop the actor when touch is released
-    actor.setVelocityX(0);
   }
 
-  //   callback functions  // 
+
+  //   callback functions  //
+
   // get random x coordinate for each new apple
   getRandomX() {
     return Math.floor(Math.random() * 480);
@@ -217,6 +198,9 @@ const config = {
   width: sizes.width,
   height: sizes.height,
   canvas: gameCanvas,
+  input: {
+    touch: true,
+  },
   physics: {
     default: "arcade",
     arcade: {

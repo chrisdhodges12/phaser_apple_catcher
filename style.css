@@ -73,7 +73,7 @@ main{
 
 #gameStartBtn {
   display: inline-block;
-  width: 100px;
+  width: 30vw;
   padding: 8px 15px;
   margin: 20px 0;
   text-align: center;
@@ -92,5 +92,31 @@ main{
   cursor: pointer;
 
 }
+
+/* #leftArrowBtn {
+  display: inline-block;
+  width: 5vw;
+  padding: 8px 15px;
+  margin: 20px 0;
+  text-align: center;
+  font-family: inherit;
+  border-radius: 10px;
+
+}
+
+#rightArrowBtn {
+  display: inline-block;
+  width: 5vw;
+  padding: 8px 15px;
+  margin: 20px 0;
+  text-align: center;
+  font-family: inherit;
+  border-radius: 10px;
+
+}
+
+#arrowBtnsDiv {
+  display: none;
+} */
 
 
