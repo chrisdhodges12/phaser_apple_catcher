@@ -12,9 +12,6 @@ const speedDown = 300;
 //html query selectors
 const gameStartDiv = document.querySelector("#gameStartDiv");
 const gameStartBtn = document.querySelector("#gameStartBtn");
-// const leftArrowBtn = document.querySelector("#leftArrowBtn");
-// const rightArrowBtn = document.querySelector("#rightArrowBtn");
-
 const gameEndDiv = document.querySelector("#gameEndDiv");
 const gameWinLoseSpan = document.querySelector("#gameWinLoseSpan");
 const gameEndScoreSpan = document.querySelector("#gameEndScoreSpan");
@@ -58,7 +55,7 @@ class GameScene extends Phaser.Scene {
     //create sounds
     this.coinMusic = this.sound.add("coin");
     this.bgMusic = this.sound.add("bgMusic");
-    // this.bgMusic.play();
+    this.bgMusic.play();
 
     //add background and basket w/ physics
     this.add.image(0, 0, "bg").setOrigin(0, 0);
@@ -142,9 +139,8 @@ class GameScene extends Phaser.Scene {
     }
 
     //input controls
-    
-    const screenWidth = 500;
 
+    const screenWidth = 500;
 
     if (this.input.activePointer.isDown && this.input.activePointer.x < screenWidth / 2) {
       this.player.setVelocityX(-this.playerSpeed);
@@ -155,8 +151,7 @@ class GameScene extends Phaser.Scene {
     }
   }
 
-
-  //   callback functions  //
+           //   callback functions  //
 
   // get random x coordinate for each new apple
   getRandomX() {
