@@ -15,6 +15,7 @@ const gameStartBtn = document.querySelector("#gameStartBtn");
 const gameEndDiv = document.querySelector("#gameEndDiv");
 const gameWinLoseSpan = document.querySelector("#gameWinLoseSpan");
 const gameEndScoreSpan = document.querySelector("#gameEndScoreSpan");
+const gameRestartBtn = document.querySelector("#gameRestartBtn");
 
 //Build the scene
 class GameScene extends Phaser.Scene {
@@ -102,9 +103,9 @@ class GameScene extends Phaser.Scene {
       font: "25px Arial",
       fill: "#000000",
     });
-
+                // #######################CHANGE CLOCK
     //Set timer countdown in miliseconds
-    this.timedEvent = this.time.delayedCall(30000, this.gameOver, [], this);
+    this.timedEvent = this.time.delayedCall(300, this.gameOver, [], this);
 
     this.emitter = this.add.particles(0, 0, "money", {
       speed: 100,
@@ -213,3 +214,8 @@ gameStartBtn.addEventListener("click", () => {
   gameStartDiv.style.display = "none";
   game.scene.resume("scene-game");
 });
+
+gameRestartBtn.addEventListener('click', function() {
+  // Refresh the page
+  location.reload();
+})
