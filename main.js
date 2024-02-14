@@ -196,7 +196,6 @@ const config = {
   canvas: gameCanvas,
   scale: {
     mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH
 },
   input: {
     touch: true,
@@ -217,6 +216,7 @@ const game = new Phaser.Game(config);
 gameStartBtn.addEventListener("click", () => {
   gameStartDiv.style.display = "none";
   game.scene.resume("scene-game");
+  gameCanvas.style.display = "flex"; 
 });
 
 //Restart Button
