@@ -105,7 +105,7 @@ class GameScene extends Phaser.Scene {
     });
                 // #######################CHANGE CLOCK
     //Set timer countdown in miliseconds
-    this.timedEvent = this.time.delayedCall(300, this.gameOver, [], this);
+    this.timedEvent = this.time.delayedCall(3000, this.gameOver, [], this);
 
     this.emitter = this.add.particles(0, 0, "money", {
       speed: 100,
@@ -215,6 +215,7 @@ gameStartBtn.addEventListener("click", () => {
   game.scene.resume("scene-game");
 });
 
+//Restart Button
 gameRestartBtn.addEventListener('click', function() {
   // Refresh the page
   location.reload();
