@@ -46,11 +46,6 @@ main{
   display: none;
   z-index: 1;
 }
-/* @media screen and (max-width: 768px) {
-            #gameCanvas {
-                width: 100%;
-                height: auto;
-            } */
 
 .gameUI{
   width: 100%;
