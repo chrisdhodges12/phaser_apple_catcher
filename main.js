@@ -25,9 +25,7 @@ class GameScene extends Phaser.Scene {
     this.player; //the basket
     this.pointer;
     this.playerSpeed = speedDown + 50;
-    this.targetApple;
-    this.targetClock;
-    this.newTarget;
+    this.target; // the apple
     this.points = 0;
     this.textScore;
     this.textTime;
@@ -47,7 +45,6 @@ class GameScene extends Phaser.Scene {
     this.load.audio("bgMusic", "/assets/bgMusic.mp3");
     this.load.audio("coin", "/assets/coin.mp3");
     this.load.image("money", "/assets/money.png");
-    this.load.image("clock", "/assets/clock.png");
   }
 
   //------------------------------//
@@ -77,31 +74,22 @@ class GameScene extends Phaser.Scene {
     // this.player.setSize(this.player.width-this.player.width/4, this.player.height/6).
     // setOffset(this.player.width/10, this.player.height - this.player.height/10);
 
-    this.targetApple = this.physics.add.image(0, 0, "apple").setOrigin(0, 0);
-    this.targetApple.setMaxVelocity(0, speedDown);
-
-    this.targetClock = this.physics.add.image(0, 0, "clock").setOrigin(0, 0);
-    this.targetClock.setMaxVelocity(0, speedDown)
+    this.target = this.physics.add.image(0, 0, "apple").setOrigin(0, 0);
+    this.target.setMaxVelocity(0, speedDown);
 
     this.physics.add.overlap(
-      this.targetApple,
+      this.target,
       this.player,
       this.targetHit,
       null,
       this
     );
 
-    this.physics.add.overlap(
-      this.targetClock,
-      this.player,
-      this.targetHit,
-      null,
-      this
-    )
-
     //handle inputs
     this.cursor = this.input.keyboard.createCursorKeys();
     this.input.on("pointerdown", function (pointer) {
+      // Log x and y coordinates of the click
+      console.log("Clicked at x: " + pointer.x + " y: " + pointer.y);
     });
 
     //create place to keep score
@@ -118,7 +106,6 @@ class GameScene extends Phaser.Scene {
                 // #######################CHANGE CLOCK
     //Set timer countdown in miliseconds
     this.timedEvent = this.time.delayedCall(30000, this.gameOver, [], this);
-    // this.addTime = this.time.update(time + 10000)
 
     this.emitter = this.add.particles(0, 0, "money", {
       speed: 100,
@@ -147,19 +134,10 @@ class GameScene extends Phaser.Scene {
     );
 
     //moves apple down and changes spawn point
-    if (this.newTarget.y >= sizes.height) {
-      this.newTarget.getRandomTarget()
-      this.newTarget.setY(0);
-      this.newTarget.setX(this.getRandomX());
+    if (this.target.y >= sizes.height) {
+      this.target.setY(0);
+      this.target.setX(this.getRandomX());
     }
-
-    // if (this.newTarget.y >= sizes.height) {
-    //   this.getRandomTarget();
-    //   this.newTarget.setY(0);
-    //   this.newTarget.setX(this.getRandomX());
-    //   // this.remainingTime = this.remainingTime + 10
-    // }
-
 
     //input controls
 
@@ -181,27 +159,10 @@ class GameScene extends Phaser.Scene {
     return Math.floor(Math.random() * 480);
   }
 
-  //get new random target
-  
-  getRandomTarget() {
-    const randomDecimal = Math.random();
-    let newTarget;
-
-    if (randomDecimal >= 0.5) {
-        this.newTarget = targetApple;
-    } else {
-        this.newTarget = targetClock;
-    }
-
-    return newTarget;
-    console.log('' , newTarget); 
-}
-
   // logic for when apple hits basket
   targetHit() {
-    this.getRandomTarget();
-    this.newTarget.setY(0);
-    this.newTarget.setX(this.getRandomX());
+    this.target.setY(0);
+    this.target.setX(this.getRandomX());
     this.points++;
     this.textScore.setText(`Score: ${this.points}`);
 
@@ -212,9 +173,6 @@ class GameScene extends Phaser.Scene {
 
     // turn this ON to stop annoying noises!!
     // this.coinMusic.stop();
-  }
-  targetClockHit() {
-    this.getRandomTarget
   }
 
   gameOver() {
@@ -258,7 +216,7 @@ const game = new Phaser.Game(config);
 gameStartBtn.addEventListener("click", () => {
   gameStartDiv.style.display = "none";
   game.scene.resume("scene-game");
-  gameCanvas.style.display = "flex";
+  gameCanvas.style.display = "flex"; 
 });
 
 //Restart Button
